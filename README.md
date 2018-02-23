@@ -3,6 +3,17 @@ Part of beautifulSoup front-end
 
 Installation:
 
+First go to https://beta.developer.spotify.com/dashboard/ and register an app.
+Set the redirect uri as http://localhost:8888/iamhome
+
+Then export client id and client secret, 
+by deafult the redirect uri will be the localhost but that can be changed.
+
+```
+export SPOTIFY_CLIENT_ID=XXXX
+export SPOTIFY_CLIENT_SECRET=YYYY
+```
+
 Clone this repository.
 
 ```
