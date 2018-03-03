@@ -4,22 +4,23 @@ let querystring = require('querystring')
 
 let app = express()
 
-let redirect_uri = process.env.SPOTIFY_REDIRECT_URI ||
-                    'http://localhost:8888/iamhome'
+let redirect_uri =
+  process.env.REDIRECT_URI ||
+  'http://localhost:8888/iamhome'
 
-app.get('/login', function(req,res){
-    res.redirect('https://accounts.spotify.com/authorize?' +
+app.get('/login', function(req, res) {
+  res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
-    response_type:'code',
-    client_id: process.env.SPOTIFY_CLIENT_ID,
-    scope: 'user-read-private user-read-email',
-    redirect_uri
+      response_type: 'code',
+      client_id: process.env.SPOTIFY_CLIENT_ID,
+      scope: 'user-read-private user-read-email',
+      redirect_uri
     }))
 })
 
-app.get('/iamhome', function(req,res){
+app.get('/iamhome', function(req, res) {
   let code = req.query.code || null
-  let auth_Options = {
+  let authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     form: {
       code: code,
@@ -27,17 +28,17 @@ app.get('/iamhome', function(req,res){
       grant_type: 'authorization_code'
     },
     headers: {
-      'Authorization': 'Basic' + (new Buffer(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET)
-      .toString('base64'))
+      'Authorization': 'Basic ' + (new Buffer(
+        process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET
+      ).toString('base64'))
     },
     json: true
   }
-  request.post(auth_Options, function(error,response,body)
-{
-  var access_token = body.access_token
-  let uri = process.env.FRONTEND_URI || 'http://localhost:3000/'
-  res.redirect(uri + '?access_token=' + access_token)
-})
+  request.post(authOptions, function(error, response, body) {
+    var access_token = body.access_token
+    let uri = process.env.FRONTEND_URI || 'http://localhost:3000'
+    res.redirect(uri + '?access_token=' + access_token)
+  })
 })
 
 let port = process.env.PORT || 8888
