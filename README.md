@@ -1,6 +1,9 @@
 # beautifulSoup-backend
 Part of beautifulSoup front-end
 
+**Make sure you have the front end clone on your machine in a different directory. Here is the link to it.**
+https://github.com/kishanankara/beautifulSoup
+
 Installation:
 
 First go to https://beta.developer.spotify.com/dashboard/ and register an app.
@@ -19,9 +22,6 @@ Clone this repository.
 ```
 git clone https://github.com/kishanankara/beautifulSoup-backend.git
 ```
-
-Make sure you have the front end clone on your machine in a different directory. Here is the link to it.
-https://github.com/kishanankara/beautifulSoup
 
 Change directory to upliftme-backend
 ```
