@@ -9,6 +9,9 @@ let redirect_uri =
   process.env.REDIRECT_URI ||
   'http://localhost:8888/iamhome'
 
+/*Endpoints
+  - Calls from front end
+*/
 app.get('/Happy', function(req, res) {
   query = 'Happy';
   res.redirect('https://accounts.spotify.com/authorize?' +
@@ -54,6 +57,11 @@ app.get('/Chill', function(req, res) {
     }))
 })
 
+/*
+   At this point spotify sends a code to a REDIRECT_URI specified in the Spotify app in developers.
+   This function listens for it and then sends SECRET and then spotify responds with access token.
+   The access_token is then sent to the front end.
+*/
 app.get('/iamhome', function(req, res) {
   let code = req.query.code || null
   let authOptions = {
