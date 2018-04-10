@@ -3,9 +3,9 @@ var router = express.Router();
 var mongo = require('mongodb');
 var assert= require('assert');
 
-var url = 'mongodb://localhost:27017';
+var url = 'mongodb://localhost:27017/upliftdb';
 
-
+router.get()
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
