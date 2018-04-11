@@ -6,11 +6,11 @@ const Schema = mongoose.Schema;
 const AngryTrackSchema = new Schema({
 	track_id: {
 		type: String,
-		required: [true, 'trackID field is required']
+		required: [true, 'track_id field is required']
 	},
-	prev_url: {
+	preview_url: {
 		type: String,
-		required: [true, 'prev_url field is required']
+		required: [true, 'preview_url field is required']
 
 	},
 	image_url: {
@@ -18,16 +18,16 @@ const AngryTrackSchema = new Schema({
 		required: [true, 'image_url field is required']
 
 	},
-	album_art: {
+	artist: {
 		type: String,
-		required: [true, 'album_art field is required']
-	}
+		required: [true, 'artist field is required']
+	},
 	available: {
 		type: Boolean,
 		default: true
 	}
 });
 
-const AngryTrack = mongoose.model('angryTrack', TrackSchema);
+const AngryTrack = mongoose.model('angryTrack', AngryTrackSchema);
 
 module.exports = AngryTrack;
