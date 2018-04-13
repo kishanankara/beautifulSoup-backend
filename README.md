@@ -6,8 +6,10 @@ https://github.com/kishanankara/beautifulSoup
 
 Installation:
 
-**IMPORTANT**
-You need to install MongoDB, there isnt any interaction with the MongoDB servers. But the backend server is ready to handle crude request.
+**IMPORTANT
+You need to install MongoDB, there isn't any interaction with the MongoDB servers. But the backend server is ready to handle crude request.**
+
+[Installation](https://docs.mongodb.com/manual/installation/) for MongoDB 
 
 First go to https://beta.developer.spotify.com/dashboard/ and register an app.
 Set two redirect uris as http://localhost:8888/iamhome and http://localhost:8888/logger
