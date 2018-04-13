@@ -42,7 +42,7 @@ Install dependencies
 npm install
 ```
 
-Then start the backend server
+At this point make sure your local Mongo server is running. Then start the backend server.
 
 ```
 npm start
