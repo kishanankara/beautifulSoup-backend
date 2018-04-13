@@ -9,6 +9,8 @@ Installation:
 **IMPORTANT
 You need to install MongoDB. There isn't any interaction with the MongoDB servers through the backend currently. But the backend server is ready to handle CRUD requests.**
 
+Please contact the [team](https://gitter.im/beautiful_Soup/Lobby) if there are any issues.
+
 [Installation](https://docs.mongodb.com/manual/installation/) for MongoDB 
 
 First go to https://beta.developer.spotify.com/dashboard/ and register an app.
