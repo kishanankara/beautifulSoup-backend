@@ -7,7 +7,7 @@ https://github.com/kishanankara/beautifulSoup
 Installation:
 
 **IMPORTANT
-You need to install MongoDB, there isn't any interaction with the MongoDB servers. But the backend server is ready to handle crude request.**
+You need to install MongoDB. There isn't any interaction with the MongoDB servers through the backend currently. But the backend server is ready to handle CRUD requests.**
 
 [Installation](https://docs.mongodb.com/manual/installation/) for MongoDB 
 
