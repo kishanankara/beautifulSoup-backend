@@ -7,7 +7,7 @@ https://github.com/kishanankara/beautifulSoup
 Installation:
 
 First go to https://beta.developer.spotify.com/dashboard/ and register an app.
-Set the redirect uri as http://localhost:8888/iamhome
+Set two redirect uris as http://localhost:8888/iamhome and http://localhost:8888/logger
 
 Then export client id and client secret, 
 by deafult the redirect uri will be the localhost but that can be changed. 
