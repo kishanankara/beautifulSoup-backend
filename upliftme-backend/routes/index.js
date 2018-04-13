@@ -1,9 +1,15 @@
-var express = require('express');
-var router = express.Router();
+// var express = require('express');
+// var router = express.Router();
+// var mongo = require('mongodb');
+// var assert= require('assert');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+// // var url = 'mongodb://localhost:27017/upliftdb';
 
-module.exports = router;
+
+// /* GET home page. */
+// router.get('/', function(req, res, next) {
+//   res.render('index', { title: 'Express' });
+// });
+
+// module.exports = router;
+
