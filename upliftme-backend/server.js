@@ -1,5 +1,6 @@
 let express = require('express')
 let routes = require('./routes/moods');
+let login = require('./routes/login');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose')
 
@@ -18,6 +19,7 @@ mongoose.Promise = global.Promise;
 
 //initialize routes
 app.use(routes);
+app.use(login);
 
 
 //listens for requests
