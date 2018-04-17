@@ -25,26 +25,26 @@ router.post('/happyTracks', function(req,res){
   //creates a new track item in the db. returns a promise when complete
   HappyTrack.create(req.body).then(function(happyTrack){
     res.send(happyTrack);
-  }); 
+  });
 });
 
 
 router.post('/sadTracks', function(req,res){
   SadTrack.create(req.body).then(function(sadTrack){
     res.send(sadTrack);
-  }); 
+  });
 });
 
 router.post('/chillTracks', function(req,res){
   ChillTrack.create(req.body).then(function(chillTrack){
     res.send(chillTrack);
-  }); 
+  });
 });
 
 router.post('/angryTracks', function(req,res){
   AngryTrack.create(req.body).then(function(angryTrack){
     res.send(angryTrack);
-  }); 
+  });
 });
 
 
@@ -123,8 +123,9 @@ router.get('/iamhome', function(req, res) {
   request.post(authOptions, function(error, response, body) {
     var access_token = body.access_token
     if(mood!==''){
+      res.cookie('data', access_token, {maxAge: (58*60*60*1000)});
       console.log('The provided mood is: ',mood);
-      res.redirect(uri+'/secretKey/'+mood+'/'+access_token);
+      res.redirect(uri+'/secretKey/'+mood+'/'+'auth');
     }
     else{
       console.log('Something went wrong in /iamhome');
