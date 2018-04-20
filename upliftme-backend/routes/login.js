@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const cookieParser = require('cookie-parser'); 
 
 request = require('request')
 
@@ -43,6 +43,13 @@ router.get('/logger', function(req, res) {
       res.redirect(uri);
 
   })
+})
+
+//logout functionality 
+router.get('/logout', function(req, res){
+
+  //redirecting back to home page
+  res.redirect(uri); 
 })
 
 module.exports=router;
