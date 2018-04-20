@@ -3,6 +3,7 @@ let routes = require('./routes/moods');
 let login = require('./routes/login');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose')
+//const cookieParser = require('cookie-parser'); 
 
 //let request = require('request')
 //let querystring = require('querystring')
@@ -11,11 +12,10 @@ const mongoose = require('mongoose')
 //set up express app
 let app = express()
 
-
+//app.use(cookieParser());
 //connect to mongodb
 mongoose.connect("mongodb://localhost/upliftmedb");
 mongoose.Promise = global.Promise;
-
 
 //initialize routes
 app.use(routes);
