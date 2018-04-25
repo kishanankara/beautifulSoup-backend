@@ -99,6 +99,7 @@ router.get('/logger', function(req, res) {
 
 
        // console.log(data_ret);
+       res.redirect(uri);
   })
 })
 
