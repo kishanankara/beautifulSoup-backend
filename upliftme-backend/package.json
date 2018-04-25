@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test has been specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
@@ -12,9 +13,14 @@
     "debug": "~2.6.9",
     "express": "~4.15.5",
     "jade": "~1.11.0",
+    "mongodb": "^3.0.5",
+    "mongoose": "^5.0.14",
     "morgan": "~1.9.0",
     "querystring": "^0.2.0",
     "request": "^2.83.0",
     "serve-favicon": "~2.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
   }
 }
