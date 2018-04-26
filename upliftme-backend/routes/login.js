@@ -1,18 +1,22 @@
 const express = require('express');
 const router = express.Router();
-let Happy = require('../models/happyTrack');
-let Angry = require('../models/angryTrack');
+let Happy = require('../models/happyTrack');  //Happy model from models.
+let Angry = require('../models/angryTrack');  // Angry Model from models, and so on.
 const fetch = require('node-fetch');
 let Sad = require('../models/sadTrack');
 let Chill = require('../models/chillTrack');
 
 request = require('request')
 
+/* Initialization of few arguments that are used later on*/
 let querystring = require('querystring')
 let uri = 'http://localhost:3000';
 let redirect_uri = 'http://localhost:8888/logger';
 var N = 10; // max size of playlist to be rendered on screen
 const TARGET_PLAYLIST_SIZE = 50;
+
+// The endpoint 'login' listens for requests on the backend, when invoked
+// with ,localhost:8888/login this get method gets invoked.
 
 router.get('/login', function(req,res){
   res.redirect('https://accounts.spotify.com/authorize?' +
@@ -23,6 +27,10 @@ router.get('/login', function(req,res){
       redirect_uri
     }))
 })
+
+// As soon as we are done authenticating, spotify redirects us to the redirect redirect_uri
+// This is the second redirect_uri inside the https://developer.spotify.com app. First redirect redirect_uri
+// is 'iamhome'. This one is called 'logger'
 
 var access_token;
 var data_ret;
@@ -47,12 +55,13 @@ router.get('/logger', function(req, res) {
     json: true
   }
   request.post(authOptions, function(error, response, body) {
-    access_token = body.access_token
+    access_token = body.access_token   // Store the access token in the access_token variable.
+    console.log(access_token);
 
-      //console.log('Something went wrong in gucci');
-      console.log(access_token);
-            //res.redirect(uri);
-            var count=0;
+    // Store the value from the database model.
+    // In the method below we are checking if Happy model's collection is 0 .
+    // If it is greater than 0 return, if not authenticate with spotify.
+    var count=0;
               Happy.count().exec((err, counter) => {
 
                 if (counter >0) {
@@ -63,6 +72,8 @@ router.get('/logger', function(req, res) {
                       populateDatabase('happy');
                 } //else statement ends here
               });
+
+    // Similar approach for all other moods.
 
               Angry.count().exec((err, counter) => {
 
@@ -97,16 +108,29 @@ router.get('/logger', function(req, res) {
                 } //else statement ends here
               });
 
-
-       // console.log(data_ret);
+      // Once populate is done or once the database size has been confirmed to be greater than 0
+      // Redirect to the front end.
        res.redirect(uri);
   })
 })
 
+ // The one function that populates the database, takes in mood as a string.
 function populateDatabase(mood)
 {
   var query=mood;
   var uri = 'https://api.spotify.com/v1/search?q=' + query + '&type=playlist&limit=25';
+
+  // Fetch method imported from package node-fetch.
+  // Similar to the React convention. Sometimes due to asynchronous nature
+  // might give an error. Call the endpoint again.
+
+  /* Because of the asynchronous nature I used a nested fetch statement.
+     After the first fetch.then.then =>{ a function is basically defined here }
+     The first fetch is used to get the first data object, then we use a random number
+     generator to select a playlist of the ones provided. The url is passed to the next
+     fetch to get the tracks. Nested fetch is used because of the asynchronous nature of the
+     first fetch. The second one will execute only after the first data is retrived.
+  */
   fetch(uri,{
     headers: {'Authorization': 'Bearer ' + access_token}
   })
@@ -124,6 +148,14 @@ function populateDatabase(mood)
         console.log("We are printing it here");
         final_list = happyJson(list_mood);
         console.log(list_mood);
+
+        // The list final_list contains 10 tracks as of now.
+        // This means that the list contains 10 JSON objects with the
+        // folllowing attributes _id , preview_url, title, artist, probability.
+
+        /* Based on the mood that is passed we use the query word to put the lists in
+           their repective collections.
+        */
         if(query == 'happy')
         {
         const happy_moods = new Happy({
