@@ -12,7 +12,7 @@ request = require('request')
 let querystring = require('querystring')
 let uri = 'http://localhost:3000';
 let redirect_uri = 'http://localhost:8888/logger';
-var N = 10; // max size of playlist to be rendered on screen
+var N = 100; // max size of playlist to be rendered on screen //Return here: Change so all songs are loaded onto database
 const TARGET_PLAYLIST_SIZE = 50;
 
 // The endpoint 'login' listens for requests on the backend, when invoked
@@ -38,8 +38,9 @@ var tracks_ret;
 var happy_list;
 
 router.get('/logger', function(req, res) {
+  console.log('====/Logger called!====');
   let code = req.query.code || 'shit'
-  console.log(code);
+  console.log('Code: ', code);
   let authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     form: {
@@ -56,61 +57,52 @@ router.get('/logger', function(req, res) {
   }
   request.post(authOptions, function(error, response, body) {
     access_token = body.access_token   // Store the access token in the access_token variable.
-    console.log(access_token);
+    console.log('Access token: ',access_token);
 
     // Store the value from the database model.
     // In the method below we are checking if Happy model's collection is 0 .
     // If it is greater than 0 return, if not authenticate with spotify.
-    var count=0;
-              Happy.count().exec((err, counter) => {
+    var count=0; //Return here: This count variable is never used. Why is it here?
+              
+    Happy.count().exec((err, counter) => {
+      console.log('The number of elements in the Happy collection is: ',counter);
+      if (counter >0) { 
+        count = counter; 
+        return;  
+      }
+      else{ populateDatabase('happy');} //else statement ends here
+    });
 
-                if (counter >0) {
-                      count = counter;
-                      return;
-                }
-                else{
-                      populateDatabase('happy');
-                } //else statement ends here
-              });
+    Angry.count().exec((err, counter) => {
+      console.log('The number of elements in the Angry collection is: ',counter);
+      if (counter >0) {
+        count = counter;
+        return;
+      }
+      else{ populateDatabase('angry');  } //else statement ends here
+    });
 
-    // Similar approach for all other moods.
+    Sad.count().exec((err, counter) => {
+      console.log('The number of elements in the Sad collection is: ',counter);
+      if (counter >0) {
+        count = counter;
+        return;
+      }
+      else{ populateDatabase('sad');  } //else statement ends here
+    });
 
-              Angry.count().exec((err, counter) => {
-
-                if (counter >0) {
-                      count = counter;
-                      return;
-                }
-                else{
-                      populateDatabase('angry');
-                } //else statement ends here
-              });
-
-              Sad.count().exec((err, counter) => {
-
-                if (counter >0) {
-                      count = counter;
-                      return;
-                }
-                else{
-                      populateDatabase('sad');
-                } //else statement ends here
-              });
-
-              Chill.count().exec((err, counter) => {
-
-                if (counter >0) {
-                      count = counter;
-                      return;
-                }
-                else{
-                      populateDatabase('chill');
-                } //else statement ends here
-              });
+    Chill.count().exec((err, counter) => {
+      console.log('The number of elements in the Chill collection is: ',counter);
+      if (counter >0) {
+        count = counter;
+        return;
+      }
+      else{ populateDatabase('chill');  } //else statement ends here
+    });
 
       // Once populate is done or once the database size has been confirmed to be greater than 0
       // Redirect to the front end.
-       res.redirect(uri);
+    res.redirect(uri);
   })
 })
 
@@ -145,9 +137,10 @@ function populateDatabase(mood)
     .then((tracks) =>{
         tracks_ret = tracks;
         list_mood=pruneTracksList(tracks_ret);
-        console.log("We are printing it here");
-        final_list = happyJson(list_mood);
-        console.log(list_mood);
+        //console.log("We are printing it here");
+        final_list = buildTracksJson(list_mood);
+        //console.log(list_mood);
+        //console.log(final_list);
 
         // The list final_list contains 10 tracks as of now.
         // This means that the list contains 10 JSON objects with the
@@ -156,107 +149,107 @@ function populateDatabase(mood)
         /* Based on the mood that is passed we use the query word to put the lists in
            their repective collections.
         */
-        if(query == 'happy')
-        {
-        const happy_moods = new Happy({
-
-                            mood: 'Happy',
-                            data: final_list
-        });
-        Happy.create(happy_moods, (error)=>{
-          if(!error){
-
-          }
-          else{
-            console.log(error);
-          }
-        })
+        if(query == 'happy') {
+          const happy_moods = new Happy({
+            mood: 'Happy',
+            data: final_list
+          });
+          Happy.create(happy_moods, (error)=>{
+            if(!error){}
+            else{
+              console.log('Happy error: ',error);
+            }
+          })
         }
 
-        if(query == 'angry')
-        {
-        const angry_moods = new Angry({
-
-                            mood: 'Angry',
-                            data: final_list
-        });
-        Angry.create(angry_moods, (error)=>{
-          if(!error){
-
-          }
-          else{
-            console.log(error);
-          }
-        })
+        if(query == 'angry') {
+          const angry_moods = new Angry({
+            mood: 'Angry',
+            data: final_list
+          });
+          Angry.create(angry_moods, (error)=>{
+            if(!error){}
+            else{
+              console.log('Angry error: ',error);
+            }
+          })
         }
 
-        if(query == 'sad')
-        {
-        const sad_moods = new Sad({
-
-                            mood: 'Sad',
-                            data: final_list
-        });
-        Sad.create(sad_moods, (error)=>{
-          if(!error){
-
-          }
-          else{
-            console.log(error);
-          }
-        })
+        if(query == 'sad') {
+          const sad_moods = new Sad({
+            mood: 'Sad',
+            data: final_list
+          });
+          Sad.create(sad_moods, (error)=>{
+            if(!error){}
+            else{
+              console.log('Sad error: ',error);
+            }
+          })
         }
 
-        if(query == 'chill')
-        {
-        const chill_moods = new Chill({
-
-                            mood: 'Chill',
-                            data: final_list
-        });
-        Chill.create(chill_moods, (error)=>{
-          if(!error){
-
-          }
-          else{
-            console.log(error);
-          }
-        })
+        if(query == 'chill') {
+          const chill_moods = new Chill({
+            mood: 'Chill',
+            data: final_list
+          });
+          Chill.create(chill_moods, (error)=>{
+            if(!error){}
+            else{
+              console.log('Chill error: ',error);
+            }
+          })
         }
-
-
-
-    } );
+    });
   })
 }
 
-function happyJson(list)
+function buildTracksJson(list)
 {
   var size = list.length;
   var return_array = [];
-    for(var i=0;i<size;i++)
+
+  //Return here: Add an entry with a special _id that contains metadata (total #prob_points)
+  // total_prob_points = size, given every track is initialized to 1 prob_point
+  //  To avoid risk of accidentally passing this entry back for rendering, do a check on backend for this _id when considering songs (or set probability to 0 so it's skipped)
+  //  Find somewhere other than probability to store this total number. If the total is stored in probability and the entry is not at the "end" of the database list, it is very likely to get pegged for rendering
+  
+  var metaJSON = {
+    _id : 'total_prob_points',
+    preview_url : 'www.example.com',
+    cover : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYTfAU3We9c2eKigEaPhMrc9OxV5XgdsrTPPkJhmFZhBIxPp6_',
+    title: 'total_prob_points',
+    artist: size,
+    probabilty : 0
+  }
+  return_array.push(metaJSON);
+
+  //Load all track entries into JSON
+  for(var i=0;i<size;i++)
+  {
+    var artists=[];
+    for(var j=0;j<list[i].track.artists.length;j++)
     {
-      var artists=[];
-      for(var j=0;j<list[i].track.artists.length;j++)
-      {
-        artists.push(list[i].track.artists[j].name);
-      }
-      var JSON = {
-          _id : list[i].track.id,
-          preview_url : list[i].track.preview_url,
-          cover : list[i].track.album.images[0].url,
-          title : list[i].track.name,
-          artist : artists,
-          probability : '1'
-      }
-      return_array.push(JSON);
+      artists.push(list[i].track.artists[j].name);
     }
+    var JSON = {
+        _id : list[i].track.id,
+        preview_url : list[i].track.preview_url,
+        cover : list[i].track.album.images[0].url,
+        title : list[i].track.name,
+        artist : artists,
+        probability : 5
+    }
+    return_array.push(JSON);
+  }
+
   return return_array;
 
 }
 function pruneTracksList(tracks){
   //console.log('Tracks list before pruning: ',tracks);
   //console.log('Num tracks before pruning: ', tracks.items.length);
+  var n = N;
 
   if(!tracks.items)
   {
@@ -272,9 +265,8 @@ function pruneTracksList(tracks){
     }
   }
 
-  // var n = 10;
-  if(trackList.length < N){
-    N = trackList.length;
+  if(trackList.length < n){
+    n = trackList.length;
   }
 
   // console.log('Length of processed tracklist is currently: ',trackList.length);
@@ -285,7 +277,7 @@ function pruneTracksList(tracks){
   //
 
   //choose n songs randomly before returning
-  return chooseNSongs(N, trackList);
+  return chooseNSongs(n, trackList);
 }
 
 function chooseNSongs(n, list){
@@ -309,13 +301,14 @@ function chooseNSongs(n, list){
     // console.log('============');
     // console.log('List of n songs: ',listOfNSongs);
     return listOfNSongs;
-  }
+}
 
 function findLargePlaylist(list)
 {
   var largePlaylistCounter = 0;
     // var TARGET_PLAYLIST_SIZE = 50;
     var largestPlaylist = 0;
+    var largestPlaylistIndex = 0;
 
     //console.log('SCANNING PLAYLISTS');
     //Scan list of playlists and store all with >=50 songs
@@ -324,6 +317,7 @@ function findLargePlaylist(list)
       //Track largest playlist found just in case none are greater than TARGET_PLAYLIST_SIZE
       if(list.playlists.items[i].tracks.total > largestPlaylist){
         largestPlaylist = list.playlists.items[i].tracks.total;
+        largestPlaylistIndex = i;
       }
 
       if(list.playlists.items[i].tracks.total >= TARGET_PLAYLIST_SIZE){
@@ -332,22 +326,16 @@ function findLargePlaylist(list)
       }
     }
 
+    return largestPlaylistIndex;
+
     //If no playlists of size TARGET_PLAYLIST_SIZE, return index of largest playlist
-    // if(arrayTracker.length === 0){
+    // if(largePlaylistCounter === 0){
     //   return largestPlaylist;
     // }
-    if(largePlaylistCounter === 0){
-      return largestPlaylist;
-    }
-    else{
-      //Return random index from array of large-enough songs
-      //var randomIndex = this.generateRandomNumber(0,arrayTracker.length-1);
-      var randomIndex = generateRandomNumber(0,largePlaylistCounter-1);
-      // console.log('Random playlist index chosen: ',randomIndex);
-      // console.log('Random playlist size: ',list.playlists.items[randomIndex].tracks.total);
-
-      return randomIndex;
-    }
+    // else{
+    //   var randomIndex = generateRandomNumber(0,largePlaylistCounter-1);
+    //   return randomIndex;
+    // }
 }
 
 function generateRandomNumber(min,max_inclusive)
@@ -381,5 +369,5 @@ function processTrack(trackItem){
        }
        return true;
 
-  }
- module.exports=router;
+}
+module.exports=router;

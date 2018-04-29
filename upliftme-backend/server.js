@@ -1,6 +1,6 @@
 const express = require('express');
-let routes = require('./routes/moods');
-let login = require('./routes/login');
+let mood_routes = require('./routes/moods');
+let login_routes = require('./routes/login');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 let app = express();
@@ -20,8 +20,9 @@ mongoose.Promise = global.Promise;
 
 
 //initialize routes
-app.use(routes);
-app.use(login);
+app.use(login_routes);
+app.use(mood_routes);
+
 
 
 
