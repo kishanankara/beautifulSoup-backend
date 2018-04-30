@@ -4,21 +4,22 @@ const HappyTrack = require('../models/happyTrack');
 const SadTrack = require('../models/sadTrack');
 const ChillTrack = require('../models/chillTrack');
 const AngryTrack = require('../models/angryTrack');
+var ObjectID = require('mongodb').ObjectID;
 
 var N = 10; //Number of tracks to pass to front end
 let mood = '';
 let uri = 'http://localhost:3000';
 
 
-// router.use(function(req,res){
-//   res.header('Access-Control-Allow-Origin',uri);
-//   res.header('Access-Control-Allow-Methods', 'GET, POST');
-// });
-
+router.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 
 //Routes to return playlists from database
-router.get('/generateHappy', function(req,res){
-  res.setHeader('Access-Control-Allow-Origin',uri);
+router.get('/generateHappy', function(req,res,next){
   //Grab a track here and send the json info back via res.send()
   HappyTrack.find({},function(err,docs){
     
@@ -33,7 +34,6 @@ router.get('/generateHappy', function(req,res){
 });
 
 router.get('/generateSad', function(req,res){
-  res.setHeader('Access-Control-Allow-Origin',uri);
   //Grab a track here and send the json info back via res.send()
   SadTrack.find({},function(err,docs){
     
@@ -48,7 +48,6 @@ router.get('/generateSad', function(req,res){
 });
 
 router.get('/generateAngry', function(req,res){
-  res.setHeader('Access-Control-Allow-Origin',uri);
   //Grab a track here and send the json info back via res.send()
   AngryTrack.find({},function(err,docs){
     
@@ -63,7 +62,6 @@ router.get('/generateAngry', function(req,res){
 });
 
 router.get('/generateChill', function(req,res){
-  res.setHeader('Access-Control-Allow-Origin',uri);
   //Grab a track here and send the json info back via res.send()
   ChillTrack.find({},function(err,docs){
     
@@ -77,7 +75,180 @@ router.get('/generateChill', function(req,res){
   })
 });
 
-//Return here
+
+
+
+
+
+
+//Routes to update tracks in database (to mark as removed by setting available to false)
+router.put('/happyTracks/:id',function(req,res,next){  
+  var id = req.params.id;
+  console.log('id is: ',id);
+
+  HappyTrack.find({},function(err,doc){
+    if(err) throw err;
+    //Loop through all entries in data array looking for provided id
+      //When found, check probability point value
+        //Do not increase past 10
+
+    var indexOfUpdate = -1;
+    var probValue = -1;
+    for(var i=0; i<doc[0].data.length;i++){
+      // console.log('_id found: ',doc[0].data[i]._id);
+      if(id===doc[0].data[i]._id){
+        // console.log('*InPost: FOUND ID in db!');
+        probValue = doc[0].data[i].probability;
+        // console.log('total_prob_points: ',doc[0].data[0].artist);
+        // console.log('*InPost: thisProbValue is: ',probValue);
+        if(probValue<10){
+          indexOfUpdate=i;
+          doc[0].data[i].probability = probValue+1;
+          console.log('Updated probVal: ',doc[0].data[i].probability);
+          doc[0].data[0].artist = doc[0].data[0].artist+1;
+          console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+          break;
+        }
+      }
+    }
+    //Put doc back in db
+    var docZeroID = {
+      _id: new ObjectID(doc[0]._id)
+    };
+    console.log('docZeroID: ',docZeroID);
+    if(indexOfUpdate!==-1){
+      HappyTrack.update({_id:docZeroID},{data:doc[0].data},(err,results)=>{
+        if(err) throw err;
+      });
+    }
+  });
+  res.send({type: 'PUT'});
+});
+
+router.put('/sadTracks/:id',function(req,res){
+  var id = req.params.id;
+  console.log('id is: ',id);
+
+  SadTrack.find({},function(err,doc){
+    if(err) throw err;
+    //Loop through all entries in data array looking for provided id
+      //When found, check probability point value
+        //Do not increase past 10
+    var indexOfUpdate = -1;
+    var probValue = -1;
+    for(var i=0; i<doc[0].data.length;i++){
+      if(id===doc[0].data[i]._id){
+        probValue = doc[0].data[i].probability;
+        if(probValue<10){
+          indexOfUpdate=i;
+          doc[0].data[i].probability = probValue+1;
+          console.log('Updated probVal: ',doc[0].data[i].probability);
+          doc[0].data[0].artist = doc[0].data[0].artist+1;
+          console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+          break;
+        }
+      }
+    }
+    //Put doc back in db
+    var docZeroID = {
+      _id: new ObjectID(doc[0]._id)
+    };
+    console.log('docZeroID: ',docZeroID);
+    if(indexOfUpdate!==-1){
+      SadTrack.update({_id:docZeroID},{data:doc[0].data},(err,results)=>{
+        if(err) throw err;
+      });
+    }
+  });
+  res.send({type: 'PUT'});
+});
+
+router.put('/chillTracks/:id',function(req,res){
+  var id = req.params.id;
+  console.log('id is: ',id);
+
+  ChillTrack.find({},function(err,doc){
+    if(err) throw err;
+    //Loop through all entries in data array looking for provided id
+      //When found, check probability point value
+        //Do not increase past 10
+    var indexOfUpdate = -1;
+    var probValue = -1;
+    for(var i=0; i<doc[0].data.length;i++){
+      if(id===doc[0].data[i]._id){
+        probValue = doc[0].data[i].probability;
+        if(probValue<10){
+          indexOfUpdate=i;
+          doc[0].data[i].probability = probValue+1;
+          console.log('Updated probVal: ',doc[0].data[i].probability);
+          doc[0].data[0].artist = doc[0].data[0].artist+1;
+          console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+          break;
+        }
+      }
+    }
+    //Put doc back in db
+    var docZeroID = {
+      _id: new ObjectID(doc[0]._id)
+    };
+    console.log('docZeroID: ',docZeroID);
+    if(indexOfUpdate!==-1){
+      ChillTrack.update({_id:docZeroID},{data:doc[0].data},(err,results)=>{
+        if(err) throw err;
+      });
+    }
+  });
+  res.send({type: 'PUT'});
+});
+
+router.put('/angryTracks/:id',function(req,res){
+  var id = req.params.id;
+  console.log('id is: ',id);
+
+  AngryTrack.find({},function(err,doc){
+    if(err) throw err;
+    //Loop through all entries in data array looking for provided id
+      //When found, check probability point value
+        //Do not increase past 10
+    var indexOfUpdate = -1;
+    var probValue = -1;
+    for(var i=0; i<doc[0].data.length;i++){
+      if(id===doc[0].data[i]._id){
+        probValue = doc[0].data[i].probability;
+        if(probValue<10){
+          indexOfUpdate=i;
+          doc[0].data[i].probability = probValue+1;
+          console.log('Updated probVal: ',doc[0].data[i].probability);
+          doc[0].data[0].artist = doc[0].data[0].artist+1;
+          console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+          break;
+        }
+      }
+    }
+    //Put doc back in db
+    var docZeroID = {
+      _id: new ObjectID(doc[0]._id)
+    };
+    console.log('docZeroID: ',docZeroID);
+    if(indexOfUpdate!==-1){
+      AngryTrack.update({_id:docZeroID},{data:doc[0].data},(err,results)=>{
+        if(err) throw err;
+      });
+    }
+  });
+  res.send({type: 'PUT'});
+});
+
+
+
+
+
+
+
+
+
+
+//HELPER FUNCTIONS
 function generateTrackList(docs){
   //Convert raw db response to a collection entry (form: array with total_prob_points followed by tracks)
   collectionEntry = getCollectionEntry(docs);
@@ -147,26 +318,6 @@ function getCollectionEntry(docs){
 function generateRandomNumber(min,max_inclusive) {
   return Math.floor(Math.random()*(max_inclusive-min+1)+min);
 }
-
-
-
-
-//Routes to update tracks in database (to mark as removed by setting available to false)
-router.put('/happyTracks/:id',function(req,res){
-  res.send({type: 'PUT'});
-});
-
-router.put('/sadTracks/:id',function(req,res){
-  res.send({type: 'PUT'});
-});
-
-router.put('/chillTracks/:id',function(req,res){
-  res.send({type: 'PUT'});
-});
-
-router.put('/angryTracks/:id',function(req,res){
-  res.send({type: 'PUT'});
-});
 
 
 module.exports=router;
