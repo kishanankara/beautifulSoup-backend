@@ -12,7 +12,7 @@ request = require('request')
 let querystring = require('querystring')
 let uri = 'http://localhost:3000';
 let redirect_uri = 'http://localhost:8888/logger';
-var N = 100; // max size of playlist to be rendered on screen //Return here: Change so all songs are loaded onto database
+var N = 500; // max size of playlist to be rendered on screen //Return here: Change so all songs are loaded onto database
 const TARGET_PLAYLIST_SIZE = 50;
 
 // The endpoint 'login' listens for requests on the backend, when invoked
@@ -110,7 +110,7 @@ router.get('/logger', function(req, res) {
 function populateDatabase(mood)
 {
   var query=mood;
-  var uri = 'https://api.spotify.com/v1/search?q=' + query + '&type=playlist&limit=25';
+  var uri = 'https://api.spotify.com/v1/search?q=' + query + '&type=playlist&limit=50';
 
   // Fetch method imported from package node-fetch.
   // Similar to the React convention. Sometimes due to asynchronous nature
@@ -277,7 +277,9 @@ function pruneTracksList(tracks){
   //
 
   //choose n songs randomly before returning
-  return chooseNSongs(n, trackList);
+  // return chooseNSongs(n, trackList); //Used in original, front-end query. Now we want all tracks.
+  console.log('Number of tracks found: ',trackList.length);
+  return trackList;
 }
 
 function chooseNSongs(n, list){
