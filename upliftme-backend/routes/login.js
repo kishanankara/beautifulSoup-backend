@@ -238,7 +238,8 @@ function buildTracksJson(list)
         cover : list[i].track.album.images[0].url,
         title : list[i].track.name,
         artist : artists,
-        probability : 5
+        probability : 5,
+        is_playing: false
     }
     return_array.push(JSON);
   }
