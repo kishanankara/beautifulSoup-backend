@@ -22,7 +22,7 @@ router.use(function(req, res, next) {
 router.get('/generateHappy', function(req,res,next){
   //Grab a track here and send the json info back via res.send()
   HappyTrack.find({},function(err,docs){
-    
+
     if(err) throw err;
     let trackList = generateTrackList(docs);
     var JSON = {
@@ -36,7 +36,7 @@ router.get('/generateHappy', function(req,res,next){
 router.get('/generateSad', function(req,res){
   //Grab a track here and send the json info back via res.send()
   SadTrack.find({},function(err,docs){
-    
+
     if(err) throw err;
     let trackList = generateTrackList(docs);
     var JSON = {
@@ -50,7 +50,7 @@ router.get('/generateSad', function(req,res){
 router.get('/generateAngry', function(req,res){
   //Grab a track here and send the json info back via res.send()
   AngryTrack.find({},function(err,docs){
-    
+
     if(err) throw err;
     let trackList = generateTrackList(docs);
     var JSON = {
@@ -64,7 +64,7 @@ router.get('/generateAngry', function(req,res){
 router.get('/generateChill', function(req,res){
   //Grab a track here and send the json info back via res.send()
   ChillTrack.find({},function(err,docs){
-    
+
     if(err) throw err;
     let trackList = generateTrackList(docs);
     var JSON = {
@@ -82,7 +82,7 @@ router.get('/generateChill', function(req,res){
 
 
 //Routes to update tracks in database (to mark as removed by setting available to false)
-router.put('/like/happyTracks/:id/:val',function(req,res,next){  
+router.put('/like/happyTracks/:id/:val',function(req,res,next){
   var id = req.params.id;
   // console.log('id is: ',id);
   var val = req.params.val;
@@ -109,8 +109,8 @@ router.put('/like/happyTracks/:id/:val',function(req,res,next){
             doc[0].data[0].artist = doc[0].data[0].artist+2;
           }
           else{
-            doc[0].data[i].probability = probValue+1; 
-            doc[0].data[0].artist = doc[0].data[0].artist+1; 
+            doc[0].data[i].probability = probValue+1;
+            doc[0].data[0].artist = doc[0].data[0].artist+1;
           }
           console.log('Updated probVal: ',doc[0].data[i].probability);
           console.log('Updated total_prob_points: ',doc[0].data[0].artist);
@@ -154,8 +154,8 @@ router.put('/like/sadTracks/:id/:val',function(req,res,next){
             doc[0].data[0].artist = doc[0].data[0].artist+2;
           }
           else{
-            doc[0].data[i].probability = probValue+1; 
-            doc[0].data[0].artist = doc[0].data[0].artist+1; 
+            doc[0].data[i].probability = probValue+1;
+            doc[0].data[0].artist = doc[0].data[0].artist+1;
           }
           console.log('Updated probVal: ',doc[0].data[i].probability);
           console.log('Updated total_prob_points: ',doc[0].data[0].artist);
@@ -199,8 +199,8 @@ router.put('/like/chillTracks/:id/:val',function(req,res,next){
             doc[0].data[0].artist = doc[0].data[0].artist+2;
           }
           else{
-            doc[0].data[i].probability = probValue+1; 
-            doc[0].data[0].artist = doc[0].data[0].artist+1; 
+            doc[0].data[i].probability = probValue+1;
+            doc[0].data[0].artist = doc[0].data[0].artist+1;
           }
           console.log('Updated probVal: ',doc[0].data[i].probability);
           console.log('Updated total_prob_points: ',doc[0].data[0].artist);
@@ -244,8 +244,8 @@ router.put('/like/angryTracks/:id/:val',function(req,res,next){
             doc[0].data[0].artist = doc[0].data[0].artist+2;
           }
           else{
-            doc[0].data[i].probability = probValue+1; 
-            doc[0].data[0].artist = doc[0].data[0].artist+1; 
+            doc[0].data[i].probability = probValue+1;
+            doc[0].data[0].artist = doc[0].data[0].artist+1;
           }
           console.log('Updated probVal: ',doc[0].data[i].probability);
           console.log('Updated total_prob_points: ',doc[0].data[0].artist);
@@ -269,7 +269,7 @@ router.put('/like/angryTracks/:id/:val',function(req,res,next){
 
 
 
-router.put('/dislike/happyTracks/:id/:val',function(req,res,next){  
+router.put('/dislike/happyTracks/:id/:val',function(req,res,next){
   var id = req.params.id;
   // console.log('id is: ',id);
   var val = req.params.val;
@@ -300,7 +300,7 @@ router.put('/dislike/happyTracks/:id/:val',function(req,res,next){
             doc[0].data[i].probability = probValue-1;
             doc[0].data[0].artist = doc[0].data[0].artist-1;
           }
-          
+
           console.log('Updated probVal: ',doc[0].data[i].probability);
           console.log('Updated total_prob_points: ',doc[0].data[0].artist);
 
@@ -348,7 +348,7 @@ router.put('/dislike/sadTracks/:id/:val',function(req,res,next){
             doc[0].data[i].probability = probValue-1;
             doc[0].data[0].artist = doc[0].data[0].artist-1;
           }
-          
+
           console.log('Updated probVal: ',doc[0].data[i].probability);
           console.log('Updated total_prob_points: ',doc[0].data[0].artist);
 
@@ -396,7 +396,7 @@ router.put('/dislike/chillTracks/:id/:val',function(req,res,next){
             doc[0].data[i].probability = probValue-1;
             doc[0].data[0].artist = doc[0].data[0].artist-1;
           }
-          
+
           console.log('Updated probVal: ',doc[0].data[i].probability);
           console.log('Updated total_prob_points: ',doc[0].data[0].artist);
 
@@ -444,7 +444,7 @@ router.put('/dislike/angryTracks/:id/:val',function(req,res,next){
             doc[0].data[i].probability = probValue-1;
             doc[0].data[0].artist = doc[0].data[0].artist-1;
           }
-          
+
           console.log('Updated probVal: ',doc[0].data[i].probability);
           console.log('Updated total_prob_points: ',doc[0].data[0].artist);
 
@@ -504,8 +504,8 @@ function generateTrackList(docs){
   //Initialize trackList
   var trackList = [];
 
-  //For each track in collectionEntry: 
-      //(1) Add 'probability' to running total 
+  //For each track in collectionEntry:
+      //(1) Add 'probability' to running total
       //(2) add track to trackList if its probability value makes runningTotal >= target from randomNumberList
       //Special note: if runningTotal is already > target value before adding next track's 'probability', keep same behavior. Add 'probability' and then add track
   var lastIndex = collectionEntry.length-1;

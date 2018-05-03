@@ -63,12 +63,12 @@ router.get('/logger', function(req, res) {
     // In the method below we are checking if Happy model's collection is 0 .
     // If it is greater than 0 return, if not authenticate with spotify.
     var count=0; //Return here: This count variable is never used. Why is it here?
-              
+
     Happy.count().exec((err, counter) => {
       console.log('The number of elements in the Happy collection is: ',counter);
-      if (counter >0) { 
-        count = counter; 
-        return;  
+      if (counter >0) {
+        count = counter;
+        return;
       }
       else{ populateDatabase('happy');} //else statement ends here
     });
@@ -213,7 +213,7 @@ function buildTracksJson(list)
   // total_prob_points = size, given every track is initialized to 1 prob_point
   //  To avoid risk of accidentally passing this entry back for rendering, do a check on backend for this _id when considering songs (or set probability to 0 so it's skipped)
   //  Find somewhere other than probability to store this total number. If the total is stored in probability and the entry is not at the "end" of the database list, it is very likely to get pegged for rendering
-  
+
   var metaJSON = {
     _id : 'total_prob_points',
     preview_url : 'www.example.com',
