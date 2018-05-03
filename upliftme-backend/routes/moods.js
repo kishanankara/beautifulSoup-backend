@@ -82,10 +82,11 @@ router.get('/generateChill', function(req,res){
 
 
 //Routes to update tracks in database (to mark as removed by setting available to false)
-router.put('/like/happyTracks/:id',function(req,res,next){  
+router.put('/like/happyTracks/:id/:val',function(req,res,next){  
   var id = req.params.id;
   // console.log('id is: ',id);
-
+  var val = req.params.val;
+  console.log('val is: ',val);
   HappyTrack.find({},function(err,doc){
     if(err) throw err;
     //Loop through all entries in data array looking for provided id
@@ -103,10 +104,16 @@ router.put('/like/happyTracks/:id',function(req,res,next){
         // console.log('*InPost: thisProbValue is: ',probValue);
         if(probValue<10){
           indexOfUpdate=i;
-          doc[0].data[i].probability = probValue+1;
-          // console.log('Updated probVal: ',doc[0].data[i].probability);
-          doc[0].data[0].artist = doc[0].data[0].artist+1;
-          // console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+          if(val==='2'&&probValue<9){
+            doc[0].data[i].probability = probValue+2;
+            doc[0].data[0].artist = doc[0].data[0].artist+2;
+          }
+          else{
+            doc[0].data[i].probability = probValue+1; 
+            doc[0].data[0].artist = doc[0].data[0].artist+1; 
+          }
+          console.log('Updated probVal: ',doc[0].data[i].probability);
+          console.log('Updated total_prob_points: ',doc[0].data[0].artist);
           break;
         }
       }
@@ -125,9 +132,10 @@ router.put('/like/happyTracks/:id',function(req,res,next){
   res.send({type: 'PUT'});
 });
 
-router.put('/like/sadTracks/:id',function(req,res,next){
+router.put('/like/sadTracks/:id/:val',function(req,res,next){
   var id = req.params.id;
   // console.log('id is: ',id);
+  var val = req.params.val;
 
   SadTrack.find({},function(err,doc){
     if(err) throw err;
@@ -141,10 +149,16 @@ router.put('/like/sadTracks/:id',function(req,res,next){
         probValue = doc[0].data[i].probability;
         if(probValue<10){
           indexOfUpdate=i;
-          doc[0].data[i].probability = probValue+1;
-          // console.log('Updated probVal: ',doc[0].data[i].probability);
-          doc[0].data[0].artist = doc[0].data[0].artist+1;
-          // console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+          if(val==='2'&&probValue<9){
+            doc[0].data[i].probability = probValue+2;
+            doc[0].data[0].artist = doc[0].data[0].artist+2;
+          }
+          else{
+            doc[0].data[i].probability = probValue+1; 
+            doc[0].data[0].artist = doc[0].data[0].artist+1; 
+          }
+          console.log('Updated probVal: ',doc[0].data[i].probability);
+          console.log('Updated total_prob_points: ',doc[0].data[0].artist);
           break;
         }
       }
@@ -163,9 +177,10 @@ router.put('/like/sadTracks/:id',function(req,res,next){
   res.send({type: 'PUT'});
 });
 
-router.put('/like/chillTracks/:id',function(req,res,next){
+router.put('/like/chillTracks/:id/:val',function(req,res,next){
   var id = req.params.id;
   // console.log('id is: ',id);
+  var val = req.params.val;
 
   ChillTrack.find({},function(err,doc){
     if(err) throw err;
@@ -179,10 +194,16 @@ router.put('/like/chillTracks/:id',function(req,res,next){
         probValue = doc[0].data[i].probability;
         if(probValue<10){
           indexOfUpdate=i;
-          doc[0].data[i].probability = probValue+1;
-          // console.log('Updated probVal: ',doc[0].data[i].probability);
-          doc[0].data[0].artist = doc[0].data[0].artist+1;
-          // console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+          if(val==='2'&&probValue<9){
+            doc[0].data[i].probability = probValue+2;
+            doc[0].data[0].artist = doc[0].data[0].artist+2;
+          }
+          else{
+            doc[0].data[i].probability = probValue+1; 
+            doc[0].data[0].artist = doc[0].data[0].artist+1; 
+          }
+          console.log('Updated probVal: ',doc[0].data[i].probability);
+          console.log('Updated total_prob_points: ',doc[0].data[0].artist);
           break;
         }
       }
@@ -201,9 +222,10 @@ router.put('/like/chillTracks/:id',function(req,res,next){
   res.send({type: 'PUT'});
 });
 
-router.put('/like/angryTracks/:id',function(req,res,next){
+router.put('/like/angryTracks/:id/:val',function(req,res,next){
   var id = req.params.id;
   // console.log('id is: ',id);
+  var val = req.params.val;
 
   AngryTrack.find({},function(err,doc){
     if(err) throw err;
@@ -217,10 +239,16 @@ router.put('/like/angryTracks/:id',function(req,res,next){
         probValue = doc[0].data[i].probability;
         if(probValue<10){
           indexOfUpdate=i;
-          doc[0].data[i].probability = probValue+1;
-          // console.log('Updated probVal: ',doc[0].data[i].probability);
-          doc[0].data[0].artist = doc[0].data[0].artist+1;
-          // console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+          if(val==='2'&&probValue<9){
+            doc[0].data[i].probability = probValue+2;
+            doc[0].data[0].artist = doc[0].data[0].artist+2;
+          }
+          else{
+            doc[0].data[i].probability = probValue+1; 
+            doc[0].data[0].artist = doc[0].data[0].artist+1; 
+          }
+          console.log('Updated probVal: ',doc[0].data[i].probability);
+          console.log('Updated total_prob_points: ',doc[0].data[0].artist);
           break;
         }
       }
@@ -239,9 +267,13 @@ router.put('/like/angryTracks/:id',function(req,res,next){
   res.send({type: 'PUT'});
 });
 
-router.put('/dislike/happyTracks/:id',function(req,res,next){  
+
+
+router.put('/dislike/happyTracks/:id/:val',function(req,res,next){  
   var id = req.params.id;
   // console.log('id is: ',id);
+  var val = req.params.val;
+  console.log('val is: ',val);
 
   HappyTrack.find({},function(err,doc){
     if(err) throw err;
@@ -260,10 +292,18 @@ router.put('/dislike/happyTracks/:id',function(req,res,next){
         // console.log('*InPost: thisProbValue is: ',probValue);
         if(probValue>1){
           indexOfUpdate=i;
-          doc[0].data[i].probability = probValue-1;
-          // console.log('Updated probVal: ',doc[0].data[i].probability);
-          doc[0].data[0].artist = doc[0].data[0].artist-1;
-          // console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+          if(val==='2'&&probValue>2){
+            doc[0].data[i].probability = probValue-2;
+            doc[0].data[0].artist = doc[0].data[0].artist-2;
+          }
+          else{
+            doc[0].data[i].probability = probValue-1;
+            doc[0].data[0].artist = doc[0].data[0].artist-1;
+          }
+          
+          console.log('Updated probVal: ',doc[0].data[i].probability);
+          console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+
           break;
         }
       }
@@ -282,9 +322,11 @@ router.put('/dislike/happyTracks/:id',function(req,res,next){
   res.send({type: 'PUT dislike'});
 });
 
-router.put('/dislike/sadTracks/:id',function(req,res,next){
+router.put('/dislike/sadTracks/:id/:val',function(req,res,next){
   var id = req.params.id;
   // console.log('id is: ',id);
+  var val = req.params.val;
+  console.log('val is: ',val);
 
   SadTrack.find({},function(err,doc){
     if(err) throw err;
@@ -298,10 +340,18 @@ router.put('/dislike/sadTracks/:id',function(req,res,next){
         probValue = doc[0].data[i].probability;
         if(probValue>1){
           indexOfUpdate=i;
-          doc[0].data[i].probability = probValue-1;
-          // console.log('Updated probVal: ',doc[0].data[i].probability);
-          doc[0].data[0].artist = doc[0].data[0].artist-1;
-          // console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+          if(val==='2'&&probValue>2){
+            doc[0].data[i].probability = probValue-2;
+            doc[0].data[0].artist = doc[0].data[0].artist-2;
+          }
+          else{
+            doc[0].data[i].probability = probValue-1;
+            doc[0].data[0].artist = doc[0].data[0].artist-1;
+          }
+          
+          console.log('Updated probVal: ',doc[0].data[i].probability);
+          console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+
           break;
         }
       }
@@ -320,9 +370,11 @@ router.put('/dislike/sadTracks/:id',function(req,res,next){
   res.send({type: 'PUT dislike'});
 });
 
-router.put('/dislike/chillTracks/:id',function(req,res,next){
+router.put('/dislike/chillTracks/:id/:val',function(req,res,next){
   var id = req.params.id;
   // console.log('id is: ',id);
+  var val = req.params.val;
+  console.log('val is: ',val);
 
   ChillTrack.find({},function(err,doc){
     if(err) throw err;
@@ -336,10 +388,18 @@ router.put('/dislike/chillTracks/:id',function(req,res,next){
         probValue = doc[0].data[i].probability;
         if(probValue>1){
           indexOfUpdate=i;
-          doc[0].data[i].probability = probValue-1;
-          // console.log('Updated probVal: ',doc[0].data[i].probability);
-          doc[0].data[0].artist = doc[0].data[0].artist-1;
-          // console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+          if(val==='2'&&probValue>2){
+            doc[0].data[i].probability = probValue-2;
+            doc[0].data[0].artist = doc[0].data[0].artist-2;
+          }
+          else{
+            doc[0].data[i].probability = probValue-1;
+            doc[0].data[0].artist = doc[0].data[0].artist-1;
+          }
+          
+          console.log('Updated probVal: ',doc[0].data[i].probability);
+          console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+
           break;
         }
       }
@@ -358,9 +418,11 @@ router.put('/dislike/chillTracks/:id',function(req,res,next){
   res.send({type: 'PUT dislike'});
 });
 
-router.put('/dislike/angryTracks/:id',function(req,res,next){
+router.put('/dislike/angryTracks/:id/:val',function(req,res,next){
   var id = req.params.id;
   // console.log('id is: ',id);
+  var val = req.params.val;
+  console.log('val is: ',val);
 
   AngryTrack.find({},function(err,doc){
     if(err) throw err;
@@ -374,10 +436,18 @@ router.put('/dislike/angryTracks/:id',function(req,res,next){
         probValue = doc[0].data[i].probability;
         if(probValue>1){
           indexOfUpdate=i;
-          doc[0].data[i].probability = probValue-1;
-          // console.log('Updated probVal: ',doc[0].data[i].probability);
-          doc[0].data[0].artist = doc[0].data[0].artist-1;
-          // console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+          if(val==='2'&&probValue>2){
+            doc[0].data[i].probability = probValue-2;
+            doc[0].data[0].artist = doc[0].data[0].artist-2;
+          }
+          else{
+            doc[0].data[i].probability = probValue-1;
+            doc[0].data[0].artist = doc[0].data[0].artist-1;
+          }
+          
+          console.log('Updated probVal: ',doc[0].data[i].probability);
+          console.log('Updated total_prob_points: ',doc[0].data[0].artist);
+
           break;
         }
       }
