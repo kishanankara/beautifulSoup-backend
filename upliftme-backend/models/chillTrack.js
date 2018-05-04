@@ -4,30 +4,16 @@ const Schema = mongoose.Schema;
 
 //create <mood>Track Schema & model
 const ChillTrackSchema = new Schema({
-	track_id: {
+	mood: {
 		type: String,
-		required: [true, 'track_id field is required']
+		required: [true, 'mood required for fetch']
 	},
-	preview_url: {
-		type: String,
-		required: [true, 'preview_url field is required']
-
-	},
-	image_url: {
-		type: String,
-		required: [true, 'image_url field is required']
-
-	},
-	artist: {
-		type: String,
-		required: [true, 'artist field is required']
-	},
-	available: {
-		type: Boolean,
-		default: true
+	data: {
+		type: Array,
+		required: [true, 'data is required']
 	}
 });
 
-const ChillTrack = mongoose.model('chillTrack', ChillTrackSchema);
+const ChillTrack = mongoose.model('chill', ChillTrackSchema);
 
 module.exports = ChillTrack;
