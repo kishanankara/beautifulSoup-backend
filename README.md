@@ -1,4 +1,5 @@
-# beautifulSoup-backend
+# THIS PROJECT IS NO LONGER MAINTAINED
+## beautifulSoup-backend
 Part of beautifulSoup front-end
 
 **Make sure you have the front end clone on your machine in a different directory. Here is the link to it.**
