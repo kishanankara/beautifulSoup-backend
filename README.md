@@ -1,4 +1,4 @@
-# THIS PROJECT IS NO LONGER MAINTAINED
+
 ## beautifulSoup-backend
 Part of beautifulSoup front-end
 
